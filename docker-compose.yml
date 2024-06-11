@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 
 services:
@@ -6,7 +6,7 @@ services:
     image: mariadb
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD: nami
+      - MYSQL_ROOT_PASSWORD: secret
     volumes:
       - ./data:/var/lib/mysql
     ports:
