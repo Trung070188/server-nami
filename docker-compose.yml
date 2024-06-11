@@ -27,7 +27,7 @@ services:
       DB_USER: 'root'
       DB_PASSWORD: 'letmein'
       DB_NAME: patientsdb
-      DB_PORT: 3306
+      DB_PORT: 10024
       DB_CONNECTION_LIMIT: 10
       SERVER_PORT: 3000
     ports:
