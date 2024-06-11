@@ -9,7 +9,7 @@ services:
       - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
       - $HOME/database:/var/lib/mysql
     ports:
-      - 10024:3306  
+      - 3306:3306  
     environment:
       MYSQL_DATABASE: patientsdb
       MYSQL_USER: admin
@@ -27,7 +27,7 @@ services:
       DB_USER: 'root'
       DB_PASSWORD: 'letmein'
       DB_NAME: patientsdb
-      DB_PORT: 10024
+      DB_PORT: 3306
       DB_CONNECTION_LIMIT: 10
       SERVER_PORT: 3000
     ports:
