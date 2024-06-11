@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mysqldb:
     image: mysql:8.0
@@ -8,14 +10,14 @@ services:
       - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
       - $HOME/database:/var/lib/mysql
     ports:
-      - 3306:3306
+      - 10024:3306
     expose:
       - 3306
     environment:
-      MYSQL_DATABASE: patientsdb
+      MYSQL_DATABASE: namigame
       MYSQL_USER: admin
-      MYSQL_PASSWORD: letmein
-      MYSQL_ROOT_PASSWORD: letmein
+      MYSQL_PASSWORD: namigame
+      MYSQL_ROOT_PASSWORD: namigame
       SERVICE_TAGS: dev
       SERVICE_NAME: mysqldb
     networks:
@@ -28,8 +30,8 @@ services:
     environment:
       DB_HOST: mysqldb
       DB_USER: 'root'
-      DB_PASSWORD: 'letmein'
-      DB_NAME: patients
+      DB_PASSWORD: 'nami'
+      DB_NAME: namigame
       DB_PORT: 3306
       DB_CONNECTION_LIMIT: 10
       SERVER_PORT: 3000

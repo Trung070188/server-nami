@@ -1,10 +1,10 @@
-CREATE DATABASE IF NOT EXISTS patientsdb;
+CREATE DATABASE IF NOT EXISTS namigame;
 
-USE patientsdb;
+USE namigame;
 
-DROP TABLE IF EXISTS patients;
+DROP TABLE IF EXISTS users;
 
-CREATE TABLE patients
+CREATE TABLE users
 (
     id         BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     first_name VARCHAR(255) DEFAULT NULL,
