@@ -1,24 +1,20 @@
 version: '3'
+
 services:
   mariadb:
     image: mariadb:latest
     container_name: mariadbcontainer
-    command: --default-authentication-plugin=mysql_native_password
     restart: unless-stopped
     volumes:
       - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
       - $HOME/database:/var/lib/mysql
     ports:
-      - 3306:3306
-    expose:
-      - 3306
+      - 10024:3306  # Changed external port to 10024, internal port remains 3306
     environment:
       MYSQL_DATABASE: patientsdb
       MYSQL_USER: admin
       MYSQL_PASSWORD: letmein
       MYSQL_ROOT_PASSWORD: letmein
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mariadb
     networks:
       - internalnet
 
@@ -30,14 +26,12 @@ services:
       DB_HOST: mariadb
       DB_USER: 'root'
       DB_PASSWORD: 'letmein'
-      DB_NAME: patients
+      DB_NAME: patientsdb
       DB_PORT: 3306
       DB_CONNECTION_LIMIT: 10
       SERVER_PORT: 3000
     ports:
       - 3000:3000
-    expose:
-      - 3000
     depends_on:
       - mariadb
     networks:
