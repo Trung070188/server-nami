@@ -6,7 +6,7 @@ services:
     image: mariadb
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD: secret
+      - MYSQL_ROOT_PASSWORD: "nami"
     volumes:
       - ./data:/var/lib/mysql
     ports:
