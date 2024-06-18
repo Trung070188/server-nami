@@ -15,7 +15,7 @@ export const getPatients = async (req: Request, res: Response): Promise<Response
     const pool = await connection();
     const result: ResultSet = await pool.query(QUERY.SELECT_PATIENTS);
     return res.status(Code.OK)
-      .send(new HttpResponse(Code.OK, Status.OK, 'Patients retrieved', result[0]));
+      .send(new HttpResponse(Code.OK, Status.OK, 'Connect success', result[0]));
   } catch (error: unknown) {
     console.error(error);
     return res.status(Code.INTERNAL_SERVER_ERROR)
@@ -30,10 +30,10 @@ export const getPatient = async (req: Request, res: Response): Promise<Response<
     const result: ResultSet = await pool.query(QUERY.SELECT_PATIENT, [req.params.patientId]);
     if (((result[0]) as Array<any>).length > 0) {
       return res.status(Code.OK)
-        .send(new HttpResponse(Code.OK, Status.OK, 'Patient retrieved', result[0]));
+        .send(new HttpResponse(Code.OK, Status.OK, 'User retrieved', result[0]));
     } else {
       return res.status(Code.NOT_FOUND)
-        .send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'Patient not found'));
+        .send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
     }
   } catch (error: unknown) {
     console.error(error);
@@ -50,7 +50,7 @@ export const createPatient = async (req: Request, res: Response): Promise<Respon
     const result: ResultSet = await pool.query(QUERY.CREATE_PATIENT, Object.values(patient));
     patient = { id: (result[0] as ResultSetHeader).insertId, ...req.body };
     return res.status(Code.CREATED)
-      .send(new HttpResponse(Code.CREATED, Status.CREATED, 'Patient created', patient));
+      .send(new HttpResponse(Code.CREATED, Status.CREATED, 'User created', patient));
   } catch (error: unknown) {
     console.error(error);
     return res.status(Code.INTERNAL_SERVER_ERROR)
@@ -67,10 +67,10 @@ export const updatePatient = async (req: Request, res: Response): Promise<Respon
     if (((result[0]) as Array<any>).length > 0) {
       const result: ResultSet = await pool.query(QUERY.UPDATE_PATIENT, [...Object.values(patient), req.params.patientId]);
       return res.status(Code.OK)
-        .send(new HttpResponse(Code.OK, Status.OK, 'Patient updated', { ...patient, id: req.params.patientId }));
+        .send(new HttpResponse(Code.OK, Status.OK, 'User updated', { ...patient, id: req.params.patientId }));
     } else {
       return res.status(Code.NOT_FOUND)
-        .send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'Patient not found'));
+        .send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
     }
   } catch (error: unknown) {
     console.error(error);
@@ -87,10 +87,10 @@ export const deletePatient = async (req: Request, res: Response): Promise<Respon
     if (((result[0]) as Array<any>).length > 0) {
       const result: ResultSet = await pool.query(QUERY.DELETE_PATIENT, [req.params.patientId]);
       return res.status(Code.OK)
-        .send(new HttpResponse(Code.OK, Status.OK, 'Patient deleted'));
+        .send(new HttpResponse(Code.OK, Status.OK, 'User deleted'));
     } else {
       return res.status(Code.NOT_FOUND)
-        .send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'Patient not found'));
+        .send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
     }
   } catch (error: unknown) {
     console.error(error);
