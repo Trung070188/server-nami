@@ -5,6 +5,7 @@ import patientRoutes from './routes/patient.routes';
 import { HttpResponse } from './domain/response';
 import { Code } from './enum/code.enum';
 import { Status } from './enum/status.enum';
+import ipRoutes from './routes/geo.rotues';
 
 export class App {
   private readonly app: Application;
@@ -29,6 +30,7 @@ export class App {
 
   private routes(): void {
     this.app.use('/users', patientRoutes);
+    this.app.use('/api/v1/address', ipRoutes);
     this.app.get('/', (_: Request, res: Response)=> res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'Welcome to the Patients API v1.0.0')));
     this.app.all('*', (_: Request, res: Response)=> res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, this.ROUTE_NOT_FOUND)));
   }
