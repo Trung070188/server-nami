@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createAddress, getUserContinent } from '../controller/geo.controller';
+import { createAddress, getUserContinent } from '../controller/address.controller';
 const ipRoutes =  Router();
 ipRoutes.route('/')
 .get(getUserContinent)
