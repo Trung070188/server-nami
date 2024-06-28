@@ -1,4 +1,4 @@
-export interface Patient {
+export interface User {
     id: number;
     score: number;
     device_uid: number;

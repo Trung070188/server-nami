@@ -1,15 +1,15 @@
 import { Router } from 'express';
-import { createPatient, deletePatient, getPatient, getPatients, insertRandomPatients, updatePatient } from '../controller/user.controller';
+import {  createUser, deleteUser, getUser, getUsers, updateUser } from '../controller/user.controller';
 
-const patientRoutes = Router();
+const userRoutes = Router();
 
-patientRoutes.route('/')
-  .get(getPatients)
-  .post(createPatient);
+userRoutes.route('/')
+  .get(getUsers)
+  .post(createUser);
 
-patientRoutes.route('/:patientId')
-  .get(getPatient)
-  .put(updatePatient)
-  .delete(deletePatient);
+  userRoutes.route('/:patientId')
+  .get(getUser)
+  .put(updateUser)
+  .delete(deleteUser);
 
-export default patientRoutes;
+export default userRoutes;
