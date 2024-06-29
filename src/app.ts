@@ -1,11 +1,12 @@
 import express, { Request, Response, Application } from 'express';
 import ip from 'ip';
 import cors from 'cors';
-import patientRoutes from './routes/patient.routes';
+import patientRoutes from './routes/user.routes';
 import { HttpResponse } from './domain/response';
 import { Code } from './enum/code.enum';
 import { Status } from './enum/status.enum';
-import ipRoutes from './routes/geo.rotues';
+import ipRoutes from './routes/address.rotues';
+import { getRankAll } from './controller/user.controller';
 
 export class App {
   private readonly app: Application;
@@ -29,9 +30,10 @@ export class App {
   }
 
   private routes(): void {
-    this.app.use('/users', patientRoutes);
+    this.app.use('/api/v1/users', patientRoutes);
     this.app.use('/api/v1/address', ipRoutes);
-    this.app.get('/', (_: Request, res: Response)=> res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'Welcome to the Patients API v1.0.0')));
+    this.app.use('/api/v1/get-rank-all', getRankAll)
+    this.app.get('/', (_: Request, res: Response)=> res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'Welcome to the NamiGame API v1.0.0')));
     this.app.all('*', (_: Request, res: Response)=> res.status(Code.NOT_FOUND).send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, this.ROUTE_NOT_FOUND)));
   }
 }

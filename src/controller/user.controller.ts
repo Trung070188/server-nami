@@ -1,3 +1,5 @@
+import { Address } from './../interface/address';
+
 import { Request, Response } from 'express';
 import { FieldPacket, OkPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
 import { connection } from '../config/mysql.config';
@@ -77,6 +79,7 @@ export const updateUser = async (req: Request, res: Response): Promise<Response<
   try {
     const pool = await connection();
     const result: ResultSet = await pool.query(QUERY.SELECT_USER, [req.params.UserId]);
+    console.log(req.params.UserId)
     if (((result[0]) as Array<any>).length > 0) {
       const result: ResultSet = await pool.query(QUERY.UPDATE_USER, [...Object.values(User), req.params.UserId]);
       return res.status(Code.OK)
@@ -133,5 +136,55 @@ export const insertRandomUsers = async (address: string): Promise<any> => {
 
   } catch (error: unknown) {
     console.error(error);
+  }
+};
+export const getRankUser = async (req: Request, res: Response): Promise<Response<User>> => {
+  console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
+  try {
+    const pool = await connection();
+    const result: ResultSet = await pool.query(QUERY.GET_RANK_USER, [req.params.UserId]);
+    if (((result[0]) as Array<any>).length > 0) {
+      return res.status(Code.OK)
+        .send(new HttpResponse(Code.OK, Status.OK, 'User retrieved', result[0]));
+    } else {
+      return res.status(Code.NOT_FOUND)
+        .send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'User not found'));
+    }
+  } catch (error: unknown) {
+    console.error(error);
+    return res.status(Code.INTERNAL_SERVER_ERROR)
+      .send(new HttpResponse(Code.INTERNAL_SERVER_ERROR, Status.INTERNAL_SERVER_ERROR, 'An error occurred'));
+  }
+};
+export const getRankAddress = async (req: Request, res: Response): Promise<Response<User>> => {
+  console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
+  try {
+    const pool = await connection();
+    const result: ResultSet = await pool.query(QUERY.GET_RANK_ADDRESS, [req.params.Address]);
+    console.log("abc");
+    if (((result[0]) as Array<any>).length > 0) {
+      return res.status(Code.OK)
+        .send(new HttpResponse(Code.OK, Status.OK, 'User retrieved', result[0]));
+    } else {
+      return res.status(Code.NOT_FOUND)
+        .send(new HttpResponse(Code.NOT_FOUND, Status.NOT_FOUND, 'not found'));
+    }
+  } catch (error: unknown) {
+    console.error(error);
+    return res.status(Code.INTERNAL_SERVER_ERROR)
+      .send(new HttpResponse(Code.INTERNAL_SERVER_ERROR, Status.INTERNAL_SERVER_ERROR, 'An error occurred'));
+  }
+};
+export const getRankAll = async (req: Request, res: Response): Promise<Response<User[]>> => {
+  console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
+  try {
+    const pool = await connection();
+    const result: ResultSet = await pool.query(QUERY.GET_RANK_ALL);
+    return res.status(Code.OK)
+      .send(new HttpResponse(Code.OK, Status.OK, 'Connect success', result[0]));
+  } catch (error: unknown) {
+    console.error(error);
+    return res.status(Code.INTERNAL_SERVER_ERROR)
+      .send(new HttpResponse(Code.INTERNAL_SERVER_ERROR, Status.INTERNAL_SERVER_ERROR, 'An error occurred'));
   }
 };
