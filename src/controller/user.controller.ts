@@ -161,7 +161,6 @@ export const getRankAddress = async (req: Request, res: Response): Promise<Respo
   try {
     const pool = await connection();
     const result: ResultSet = await pool.query(QUERY.GET_RANK_ADDRESS, [req.params.Address]);
-    console.log("abc");
     if (((result[0]) as Array<any>).length > 0) {
       return res.status(Code.OK)
         .send(new HttpResponse(Code.OK, Status.OK, 'User retrieved', result[0]));
