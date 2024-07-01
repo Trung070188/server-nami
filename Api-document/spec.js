@@ -7,7 +7,7 @@ var spec =
         version: "1.0",    // Phiên bản API
         title: "NamiGame - Blumgi"
     },
-    host: "http:/14.225.207.76:3000",    // Server và port deploy API
+    host: "http://14.225.207.76:3000",    // Server và port deploy API
     basePath: "/api/v1",       // Đường dẫn tới API
     tags: [ 
         {
@@ -202,6 +202,23 @@ var spec =
                 description: "Nếu 2 user cùng điểm số sẽ sắp xếp theo thời gian khới tạo {created_at}",
                 operationId: "getRankAddressAll",
                 consumes: ["multipart/form-data"],
+                produces: ["application/json"],
+                parameters: [
+                ],
+                responses: {
+                    200: {                                    
+                        description: "Lấy dữ liệu thành công",    
+                    },
+                },
+
+            }
+        },
+        "/rank-address": {
+            get : {
+                tags: ["User"],
+                summary: "Xếp hạng quốc gia dựa trên score",
+                description:"",
+                operationId: "getRankAddress1",
                 produces: ["application/json"],
                 parameters: [
                 ],
