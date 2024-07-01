@@ -47,7 +47,7 @@ export const getUser = async (req: Request, res: Response): Promise<Response<Use
   }
 };
 
-export const createUser = async (req: Request, res: Response): Promise<Response<User>> => {
+export const createUser = async (req: Request, res: Response): Promise<any> => {
   console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
   let User: User = { ...req.body };
   try {
@@ -65,7 +65,7 @@ export const createUser = async (req: Request, res: Response): Promise<Response<
     const result: ResultSet = await pool.query(QUERY.CREATE_USER, Object.values(User));
     User = { id: (result[0] as ResultSetHeader).insertId, ...req.body };
     return res.status(Code.CREATED)
-      .send(new HttpResponse(Code.CREATED, Status.CREATED, 'User created', User));
+      .send(new HttpResponse(Code.CREATED, Status.CREATED, 'User created', User.id));
   } catch (error: unknown) {
     console.error(error);
     return res.status(Code.INTERNAL_SERVER_ERROR)

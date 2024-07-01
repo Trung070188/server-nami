@@ -30,7 +30,7 @@ export class App {
   }
 
   private routes(): void {
-    this.app.use('/api/v1/users', patientRoutes);
+    this.app.use('/api/v1/user', patientRoutes);
     this.app.use('/api/v1/address', ipRoutes);
     this.app.use('/api/v1/get-rank-all', getRankAll)
     this.app.get('/', (_: Request, res: Response)=> res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'Welcome to the NamiGame API v1.0.0')));

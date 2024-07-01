@@ -195,7 +195,7 @@ var spec =
 
             }
         },
-        "/rank-all/" : {
+        "/get-rank-all/" : {
             get: {
                 tags: ["User"],
                 summary: "Lấy ra limit 50 user đã được sắp xếp theo điểm số tất cả các khu vực",
