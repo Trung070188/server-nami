@@ -8,38 +8,17 @@ import { FieldPacket, OkPacket, ResultSetHeader, RowDataPacket } from 'mysql2';
 import Connection from 'mysql2/typings/mysql/lib/Connection';
 import { connection } from '../config/mysql.config';
 import { QUERY } from '../query/address.query';
+
 type ResultSet = [RowDataPacket[] | RowDataPacket[][] | OkPacket | OkPacket[] | ResultSetHeader, FieldPacket[]];
+
 const apiKey = '507aa117e27831'; 
 const ipinfoUrl = `https://ipinfo.io?token=${apiKey}`;
-
-const continentMap: { [key: string]: string } = {
-    "AF": "Africa",
-    "AN": "Antarctica",
-    "AS": "Asia",
-    "EU": "Europe",
-    "NA": "North America",
-    "OC": "Oceania",
-    "SA": "South America"
-};
-
-const countryToContinentMap: { [key: string]: string } = {
-    "US": "NA", "CA": "NA", "MX": "NA", // Bắc Mỹ
-    "BR": "SA", "AR": "SA", "CO": "SA", // Nam Mỹ
-    "CN": "AS", "JP": "AS", "IN": "AS", "VN": "AS", // Châu Á
-    "DE": "EU", "FR": "EU", "GB": "EU", // Châu Âu
-    "AU": "OC", "NZ": "OC", // Châu Đại Dương
-    "ZA": "AF", "EG": "AF", "NG": "AF" // Châu Phi
-    // Thêm các mã quốc gia khác vào đây
-};
 
 export const getUserContinent = async (req: Request, res: Response): Promise<Response> => {
     console.info(`[${new Date().toLocaleString()}] Incoming ${req.method} ${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
     try {
         const response = await axios.get(ipinfoUrl);
         const country = response.data.country; 
-        const continentCode = countryToContinentMap[country];
-        const continent = continentMap[continentCode];
-
         const result = [{country: country}];
 
         return res.status(Code.OK).send(new HttpResponse(Code.OK, Status.OK, 'User continent retrieved', result));

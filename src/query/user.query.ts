@@ -48,7 +48,7 @@ export const QUERY = {
     FROM ranked_users
     WHERE id = ?;
   `,
-  GET_RANK_ADDRESS: `
+  GET_RANK_ADDRESS_USER: `
     WITH ranked_users AS (
     SELECT 
         u.id,
@@ -78,5 +78,15 @@ export const QUERY = {
     FROM ranked_users
     ORDER BY overall_rank
     LIMIT 50;
+  `,
+  RANK_ADDRESS: `
+    SELECT 
+      u.address, 
+      AVG(u.score) AS average_score
+  FROM users u
+  GROUP BY u.address
+  ORDER BY average_score DESC
+  LIMIT 100;
   `
+  
 };

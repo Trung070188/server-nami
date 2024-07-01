@@ -120,11 +120,11 @@ export const insertRandomUsers = async (address: string): Promise<any> => {
     const pool = await connection();
     const users = [];
     const customFaker = new Faker({ locale: [en] });
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 50; i++) {
       users.push([
         address,
         1,
-        customFaker.number.int({ min: 70, max: 100 }),
+        customFaker.number.int({ min: 350, max: 500 }),
         1
       ]);
     }
@@ -156,11 +156,11 @@ export const getRankUser = async (req: Request, res: Response): Promise<Response
       .send(new HttpResponse(Code.INTERNAL_SERVER_ERROR, Status.INTERNAL_SERVER_ERROR, 'An error occurred'));
   }
 };
-export const getRankAddress = async (req: Request, res: Response): Promise<Response<User>> => {
+export const getRankAddressUser = async (req: Request, res: Response): Promise<Response<User>> => {
   console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
   try {
     const pool = await connection();
-    const result: ResultSet = await pool.query(QUERY.GET_RANK_ADDRESS, [req.params.Address]);
+    const result: ResultSet = await pool.query(QUERY.GET_RANK_ADDRESS_USER, [req.params.Address]);
     if (((result[0]) as Array<any>).length > 0) {
       return res.status(Code.OK)
         .send(new HttpResponse(Code.OK, Status.OK, 'User retrieved', result[0]));
@@ -187,3 +187,18 @@ export const getRankAll = async (req: Request, res: Response): Promise<Response<
       .send(new HttpResponse(Code.INTERNAL_SERVER_ERROR, Status.INTERNAL_SERVER_ERROR, 'An error occurred'));
   }
 };
+export const getRankAddress = async (req: Request, res: Response): Promise<Response<User[]>> => {
+  console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
+  try {
+    const pool = await connection();
+    const result: ResultSet = await pool.query(QUERY.RANK_ADDRESS);
+    return res.status(Code.OK)
+      .send(new HttpResponse(Code.OK, Status.OK, 'Connect success', result[0]));
+  } catch (error: unknown) {
+    console.error(error);
+    return res.status(Code.INTERNAL_SERVER_ERROR)
+      .send(new HttpResponse(Code.INTERNAL_SERVER_ERROR, Status.INTERNAL_SERVER_ERROR, 'An error occurred'));
+  }
+};
+
+
