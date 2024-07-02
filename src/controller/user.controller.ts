@@ -50,6 +50,7 @@ export const getUser = async (req: Request, res: Response): Promise<Response<Use
 export const createUser = async (req: Request, res: Response): Promise<any> => {
   console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
   let User: User = { ...req.body };
+  User["created_at"] = new Date();
   try {
     const pool = await connection();
     const address = User.address;

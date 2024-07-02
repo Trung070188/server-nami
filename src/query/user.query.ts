@@ -7,7 +7,7 @@ export const QUERY = {
     `,
     SELECT_USER: 'SELECT * FROM users WHERE id = ?',
     
-    CREATE_USER: 'INSERT INTO users(address, device_uid, score, status) VALUES (?, ?, ?, ?);',
+    CREATE_USER: 'INSERT INTO users(address, device_uid, score, status, created_at) VALUES (?, ?, ?, ?);',
     UPDATE_USER: 'UPDATE users SET address = ?, device_uid = ?, status = ?, score = ? WHERE id = ?',
     DELETE_USER: 'DELETE FROM users WHERE id = ?',
     INSERT_USERS: `

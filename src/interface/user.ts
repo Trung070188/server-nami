@@ -4,4 +4,5 @@ export interface User {
     device_uid: number;
     address: string;
     status: number;
+    created_at: Date;
 }
