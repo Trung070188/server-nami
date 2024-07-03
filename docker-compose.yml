@@ -9,7 +9,7 @@ services:
       - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
       - $HOME/database:/var/lib/mysql
     ports:
-      - 3306:3306  
+      - "3306:3306"
     environment:
       MYSQL_DATABASE: patientsdb
       MYSQL_USER: admin
@@ -31,7 +31,7 @@ services:
       DB_CONNECTION_LIMIT: 500
       SERVER_PORT: 3000
     ports:
-      - 3000:3000
+      - "3000:3000"
     depends_on:
       - mariadb
     networks:
@@ -42,11 +42,11 @@ services:
     container_name: nginxcontainer
     restart: unless-stopped
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./letsencrypt:/etc/letsencrypt
+      - ./letsencrypt:/etc/letsencrypt:ro
     depends_on:
       - nodeapp
     networks:
