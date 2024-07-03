@@ -52,7 +52,7 @@ services:
       - nodeapp
     networks:
       - internalnet
-    certbot:
+  certbot:
       image: certbot/certbot
       container_name: certbot
       volumes:
