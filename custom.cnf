@@ -1,1 +1,1 @@
-max_connections = 1000
+max_connections = 100000
