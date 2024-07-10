@@ -37,18 +37,18 @@ services:
     networks:
       - internalnet
 
-  nginx:
-    image: nginx:latest
-    container_name: nginxcontainer
-    restart: unless-stopped
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf 
-    depends_on:
-      - nodeapp
-    networks:
-      - internalnet
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginxcontainer
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf 
+  #   depends_on:
+  #     - nodeapp
+  #   networks:
+  #     - internalnet
 networks:
   internalnet:
     driver: bridge
