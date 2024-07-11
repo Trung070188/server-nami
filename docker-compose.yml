@@ -21,7 +21,7 @@ services:
   nginx-proxy:
     build:
       context: .
-      dockerfile: Dockerfile.nginx-proxy  # Adjust if necessary
+      dockerfile: Dockerfile.nginx-proxy
     image: nginx-proxy:v1
     container_name: nginx-proxy
     ports:
@@ -39,7 +39,7 @@ services:
   letsencrypt:
     build:
       context: .
-      dockerfile: Dockerfile.letsencrypt  # Adjust if necessary
+      dockerfile: Dockerfile.letsencrypt
     image: letsencrypt-companion:v1
     container_name: letsencrypt
     volumes:
