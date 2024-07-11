@@ -7,10 +7,10 @@ services:
       dockerfile: Dockerfile
     image: nodeapp:v1
     environment:
-      - VIRTUAL_HOST=demo.viettranx.com
+      - VIRTUAL_HOST=api.pokeafk.online
       - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=demo.viettranx.com
-      - LETSENCRYPT_EMAIL=blog@demo.viettranx.com
+      - LETSENCRYPT_HOST=api.pokeafk.online
+      - LETSENCRYPT_EMAIL=namigame@gmail.com
     ports:
       - "3000:3000"
     depends_on:
