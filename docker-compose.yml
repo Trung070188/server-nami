@@ -6,11 +6,6 @@ services:
       context: .
       dockerfile: Dockerfile
     image: nodeapp:v1
-    environment:
-      - VIRTUAL_HOST=api.pokeafk.online
-      - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=api.pokeafk.online
-      - LETSENCRYPT_EMAIL=namigame@gmail.com
     ports:
       - "3000:3000"
     depends_on:
@@ -68,6 +63,21 @@ services:
       MYSQL_USER: admin
       MYSQL_PASSWORD: letmein
       MYSQL_ROOT_PASSWORD: letmein
+    networks:
+      - internalnet
+
+  simple-web:
+    image: nodeapp:v1
+    container_name: simple-web
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: "api.pokeafk.online"
+      VIRTUAL_PORT: 3000
+      LETSENCRYPT_HOST: "api.pokeafk.online"
+      LETSENCRYPT_EMAIL: "namigame@gmail.com"
+    depends_on:
+      - nginx-proxy
+      - letsencrypt
     networks:
       - internalnet
 
