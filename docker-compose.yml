@@ -57,7 +57,7 @@ services:
       - ~/nginx-certs:/etc/nginx/certs:ro
       - ~/nginx-conf:/etc/nginx/conf.d
       - ~/nginx-logs:/var/log/nginx
-      - /usr/share/nginx/html
+      - /usr/share/nginx/html:/usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
       - network-namin
@@ -70,6 +70,7 @@ services:
     volumes:
       - ~/nginx/vhost.d:/etc/nginx/vhost.d
       - ~/nginx-certs:/etc/nginx/certs:rw
+      - /usr/share/nginx/html:/usr/share/nginx/html
       - /var/run/docker.sock:/var/run/docker.sock:ro
     environment:
       NGINX_PROXY_CONTAINER: nginx-proxy
