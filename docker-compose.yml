@@ -51,7 +51,7 @@ services:
     networks:
       - internalnet
 
-   letsencrypt:
+  letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt
     restart: unless-stopped
