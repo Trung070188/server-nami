@@ -7,14 +7,14 @@ services:
       dockerfile: Dockerfile
     image: nodeapp:v1
     environment:
-      - VIRTUAL_HOST=api.pokeafk.online
+      - VIRTUAL_HOST=demo.viettranx.com
       - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=api.pokeafk.online
-      - LETSENCRYPT_EMAIL=devnami@gmail.com
+      - LETSENCRYPT_HOST=demo.viettranx.com
+      - LETSENCRYPT_EMAIL=blog@demo.viettranx.com
     ports:
       - "3000:3000"
     depends_on:
-      - mariadb
+      - mariadb 
     networks:
       - internalnet
 
@@ -50,6 +50,24 @@ services:
       - NGINX_PROXY_CONTAINER=nginx-proxy
     depends_on:
       - nginx-proxy
+    networks:
+      - internalnet
+
+  mariadb:  # Thêm service mariadb vào đây
+    image: mariadb:latest
+    container_name: mariadbcontainer
+    restart: unless-stopped
+    volumes:
+      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - $HOME/database:/var/lib/mysql
+      - ./custom.cnf:/etc/mysql/conf.d/custom.cnf
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: patientsdb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: letmein
+      MYSQL_ROOT_PASSWORD: letmein
     networks:
       - internalnet
 
