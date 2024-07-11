@@ -1,53 +1,6 @@
 version: '3'
 
 services:
-  nodeapp:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: nodeapp:v1
-    ports:
-      - "3000:3000"
-    depends_on:
-      - mariadb
-    networks:
-      - internalnet
-
-  nginx-proxy:
-    build:
-      context: .
-      dockerfile: Dockerfile.nginx-proxy
-    image: nginx-proxy:v1
-    container_name: nginx-proxy
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx.vhost.d:/etc/nginx/vhost.d
-      - ./nginx.certs:/etc/nginx/certs:ro
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    environment:
-      - ENABLE_IPV6=true
-    networks:
-      - internalnet
-
-  letsencrypt:
-    build:
-      context: .
-      dockerfile: Dockerfile.letsencrypt
-    image: letsencrypt-companion:v1
-    container_name: letsencrypt
-    volumes:
-      - ./nginx.vhost.d:/etc/nginx/vhost.d
-      - ./nginx.certs:/etc/nginx/certs:rw
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    environment:
-      - NGINX_PROXY_CONTAINER=nginx-proxy
-    depends_on:
-      - nginx-proxy
-    networks:
-      - internalnet
-
   mariadb:
     image: mariadb:latest
     container_name: mariadbcontainer
@@ -64,23 +17,39 @@ services:
       MYSQL_PASSWORD: letmein
       MYSQL_ROOT_PASSWORD: letmein
     networks:
-      - internalnet
+      - myapp-network
 
-  simple-web:
+  nodeapp:
+    container_name: nodeappcontainer
+    build: .
     image: nodeapp:v1
-    container_name: simple-web
-    restart: unless-stopped
     environment:
-      VIRTUAL_HOST: "api.pokeafk.online"
-      VIRTUAL_PORT: 3000
-      LETSENCRYPT_HOST: "api.pokeafk.online"
-      LETSENCRYPT_EMAIL: "namigame@gmail.com"
+      DB_HOST: mariadb
+      DB_USER: 'root'
+      DB_PASSWORD: 'letmein'
+      DB_NAME: patientsdb
+      DB_PORT: 3306
+      DB_CONNECTION_LIMIT: 500
+      SERVER_PORT: 3000
+    ports:
+      - "3000:3000"
     depends_on:
-      - nginx-proxy
-      - letsencrypt
+      - mariadb
     networks:
-      - internalnet
+      - myapp-network
 
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginxcontainer
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf 
+  #   depends_on:
+  #     - nodeapp
+  #   networks:
+  #     - internalnet
 networks:
-  internalnet:
+  myapp-network:
     driver: bridge
