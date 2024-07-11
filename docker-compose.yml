@@ -63,6 +63,8 @@ services:
     container_name: letsencrypt
     restart: unless-stopped
     privileged: true
+    environment:
+      NGINX_PROXY_CONTAINER: nginx-proxy  # Set the name of nginx-proxy container here
     volumes:
       - ./nginx/vhost.d:/etc/nginx/vhost.d
       - ./nginx-certs:/etc/nginx/certs:rw
@@ -73,14 +75,14 @@ services:
       - internalnet
 
   simple-web:
-    image: nodeapp:v1
+    image: yeasy/simple-web
     container_name: simple-web
     restart: unless-stopped
     environment:
-      VIRTUAL_HOST: "api.pokeafk.online"
+      VIRTUAL_HOST: "demo.viettranx.com"
       VIRTUAL_PORT: 3000
-      LETSENCRYPT_HOST: "api.pokeafk.online"
-      LETSENCRYPT_EMAIL: "trung@gmail.com"
+      LETSENCRYPT_HOST: "demo.viettranx.com"
+      LETSENCRYPT_EMAIL: "blog@demo.viettranx.com"
     depends_on:
       - nginx-proxy
       - letsencrypt
