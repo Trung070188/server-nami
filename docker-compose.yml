@@ -14,13 +14,13 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - mariadb 
+      - mariadb
     networks:
       - internalnet
 
   nginx-proxy:
     build:
-      context: ./nginx-proxy
+      context: ./nginx-proxy  # Sửa đường dẫn context tại đây
       dockerfile: Dockerfile.nginx-proxy
     image: nginx-proxy:v1
     container_name: nginx-proxy
@@ -38,7 +38,7 @@ services:
 
   letsencrypt:
     build:
-      context: ./nginx-proxy
+      context: ./nginx-proxy  # Sửa đường dẫn context tại đây
       dockerfile: Dockerfile.letsencrypt
     image: letsencrypt-companion:v1
     container_name: letsencrypt
@@ -53,7 +53,7 @@ services:
     networks:
       - internalnet
 
-  mariadb:  # Thêm service mariadb vào đây
+  mariadb:
     image: mariadb:latest
     container_name: mariadbcontainer
     restart: unless-stopped
