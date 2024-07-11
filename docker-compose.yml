@@ -20,8 +20,8 @@ services:
 
   nginx-proxy:
     build:
-      context: ./nginx-proxy  # Sửa đường dẫn context tại đây
-      dockerfile: Dockerfile.nginx-proxy
+      context: .
+      dockerfile: Dockerfile.nginx-proxy  # Adjust if necessary
     image: nginx-proxy:v1
     container_name: nginx-proxy
     ports:
@@ -38,8 +38,8 @@ services:
 
   letsencrypt:
     build:
-      context: ./nginx-proxy  # Sửa đường dẫn context tại đây
-      dockerfile: Dockerfile.letsencrypt
+      context: .
+      dockerfile: Dockerfile.letsencrypt  # Adjust if necessary
     image: letsencrypt-companion:v1
     container_name: letsencrypt
     volumes:
