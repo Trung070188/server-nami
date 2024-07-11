@@ -53,7 +53,7 @@ services:
       - ./nginx-certs:/etc/nginx/certs:ro
       - ./nginx-conf:/etc/nginx/conf.d
       - ./nginx-logs:/var/log/nginx
-      - /usr/share/nginx/html
+      - /usr/share/nginx/html   # Ensure this volume is writable
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
       - internalnet
@@ -64,7 +64,7 @@ services:
     restart: unless-stopped
     privileged: true
     environment:
-      NGINX_PROXY_CONTAINER: nginx-proxy  # Set the name of nginx-proxy container here
+      NGINX_PROXY_CONTAINER: nginx-proxy
     volumes:
       - ./nginx/vhost.d:/etc/nginx/vhost.d
       - ./nginx-certs:/etc/nginx/certs:rw
