@@ -15,7 +15,7 @@ services:
       MYSQL_PASSWORD: letmein
       MYSQL_ROOT_PASSWORD: letmein
     networks:
-      - internalnet
+      - bridge
 
   nodeapp:
     container_name: nodeappcontainer
@@ -34,24 +34,7 @@ services:
     depends_on:
       - mariadb
     networks:
-      - internalnet
-
-  nginx:
-    image: jwilder/nginx-proxy
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-    networks:
-      - internalnet
-
-  letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    environment:
-      NGINX_PROXY_CONTAINER: nginx
-    networks:
-      - internalnet
-        
+      - bridge
 networks:
-  internalnet:
+  bridge:
     driver: bridge
