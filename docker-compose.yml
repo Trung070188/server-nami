@@ -38,37 +38,25 @@ services:
     networks:
       - internalnet
 
-    nginx:
-      image: jwilder/nginx-proxy
-      ports:
-        - "80:80"
-        - "443:443"
-      volumes:
-        - /var/run/docker.sock:/tmp/docker.sock:ro
-      networks:
-        - internalnet
+  nginx:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - internalnet
 
-    letsencrypt:
-      image: jrcs/letsencrypt-nginx-proxy-companion
-      volumes:
-        - /var/run/docker.sock:/var/run/docker.sock:ro
-      environment:
-        NGINX_PROXY_CONTAINER: nginx
-      networks:
-        - internalnet
-
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: nginxcontainer
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf 
-  #   depends_on:
-  #     - nodeapp
-  #   networks:
-  #     - internalnet
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      NGINX_PROXY_CONTAINER: nginx
+    networks:
+      - internalnet
+        
 networks:
   internalnet:
     driver: bridge
