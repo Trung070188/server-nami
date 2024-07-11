@@ -79,6 +79,8 @@ export const createUser = async (req: Request, res: Response): Promise<any> => {
 export const updateUser = async (req: Request, res: Response): Promise<Response<User>> => {
   console.info(`[${new Date().toLocaleString()}] Incoming ${req.method}${req.originalUrl} Request from ${req.rawHeaders[0]} ${req.rawHeaders[1]}`);
   let User: User = { ...req.body };
+  User.updated_at = moment().tz('Asia/Bangkok').format('YYYY-MM-DD HH:mm:ss');
+
   try {
     const pool = await connection();
     const result: ResultSet = await pool.query(QUERY.SELECT_USER, [req.params.UserId]);
