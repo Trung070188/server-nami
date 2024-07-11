@@ -51,7 +51,7 @@ services:
       - "80:80"
       - "443:443"
     environment:
-      ENABLE_IPV6: true
+      ENABLE_IPV6: "true"  # Changed to string
     volumes:
       - ~/nginx/vhost.d:/etc/nginx/vhost.d
       - ~/nginx-certs:/etc/nginx/certs:ro
