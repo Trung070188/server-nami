@@ -17,7 +17,7 @@ services:
       MYSQL_PASSWORD: letmein
       MYSQL_ROOT_PASSWORD: letmein
     networks:
-      - network-namin
+      - network-nami
 
   nodeapp:
     container_name: nodeappcontainer
@@ -36,7 +36,7 @@ services:
     depends_on:
       - mariadb
     networks:
-      - network-namin
+      - network-nami
 
   # nginx:
   #   image: nginx:latest
@@ -51,5 +51,5 @@ services:
   #   networks:
   #     - internalnet
 networks:
-  myapp-network:
+  network-nami:
     external: true
