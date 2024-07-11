@@ -1,38 +1,38 @@
-version: '3'  # Sử dụng phiên bản mới hơn để hỗ trợ các tính năng mới
+version: '3'
 
 services:
   mariadb:
     image: mariadb:latest
-    container_name: mariadb
+    container_name: mariadbcontainer
     restart: unless-stopped
     volumes:
-      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mariadb_data:/var/lib/mysql  # Sử dụng named volume để lưu trữ dữ liệu
+      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
+      - $HOME/database:/var/lib/mysql
+      - ./custom.cnf:/etc/mysql/conf.d/custom.cnf
+    ports:
+      - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=letmein
-      - MYSQL_DATABASE=patientsdb
-      - MYSQL_USER=admin
-      - MYSQL_PASSWORD=letmein
+      MYSQL_DATABASE: patientsdb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: letmein
+      MYSQL_ROOT_PASSWORD: letmein
     networks:
       - internalnet
 
   nodeapp:
+    container_name: nodeappcontainer
     build: .
     image: nodeapp:v1
-    container_name: nodeapp
-    restart: unless-stopped
     environment:
-      - DB_HOST=mariadb
-      - DB_USER=admin
-      - DB_PASSWORD=letmein
-      - DB_NAME=patientsdb
-      - DB_PORT=3306
-      - DB_CONNECTION_LIMIT=500
-      - SERVER_PORT=3000
-      - VIRTUAL_HOST=api.pokeafk.online
-      - VIRTUAL_PORT=3000
-      - LETSENCRYPT_HOST=api.pokeafk.online
-      - LETSENCRYPT_EMAIL=namigame@gmail.com  # Thay thế bằng email của bạn
+      DB_HOST: mariadb
+      DB_USER: 'root'
+      DB_PASSWORD: 'letmein'
+      DB_NAME: patientsdb
+      DB_PORT: 3306
+      DB_CONNECTION_LIMIT: 500
+      SERVER_PORT: 3000
+    ports:
+      - "3000:3000"
     depends_on:
       - mariadb
     networks:
@@ -42,12 +42,19 @@ services:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
     restart: unless-stopped
+    privileged: true
+    environment:
+      ENABLE_IPV6: 'true'
     ports:
       - "80:80"
       - "443:443"
     volumes:
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
+      - ./nginx-certs:/etc/nginx/certs:ro
+      - ./nginx-conf:/etc/nginx/conf.d
+      - ./nginx-logs:/var/log/nginx
+      - /usr/share/nginx/html
       - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./nginx-certs:/etc/nginx/certs:rw
     networks:
       - internalnet
 
@@ -55,18 +62,31 @@ services:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt
     restart: unless-stopped
+    privileged: true
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./nginx/vhost.d:/etc/nginx/vhost.d
       - ./nginx-certs:/etc/nginx/certs:rw
-    environment:
-      - DEFAULT_EMAIL=namigame@gmail.com  # Thay thế bằng email của bạn
-    depends_on:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    volumes_from:
       - nginx-proxy
     networks:
       - internalnet
 
-volumes:
-  mariadb_data:  
+  simple-web:
+    image: nodeapp:v1
+    container_name: simple-web
+    restart: unless-stopped
+    environment:
+      VIRTUAL_HOST: "api.pokeafk.online"
+      VIRTUAL_PORT: 3000
+      LETSENCRYPT_HOST: "api.pokeafk.online"
+      LETSENCRYPT_EMAIL: "trung@gmail.com"
+    depends_on:
+      - nginx-proxy
+      - letsencrypt
+    networks:
+      - internalnet
 
 networks:
   internalnet:
+    driver: bridge
