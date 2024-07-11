@@ -31,12 +31,51 @@ services:
       DB_PORT: 3306
       DB_CONNECTION_LIMIT: 500
       SERVER_PORT: 3000
+      VIRTUAL_HOST: "api.pokeafk.online"
+      VIRTUAL_PORT: 3000
+      LETSENCRYPT_HOST: "api.pokeafk.online"
+      LETSENCRYPT_EMAIL: "namigame@gmail.com"
     ports:
       - "3000:3000"
     depends_on:
       - mariadb
     networks:
       - network-namin
+
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    restart: unless-stopped
+    privileged: true
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      ENABLE_IPV6: true
+    volumes:
+      - ~/nginx/vhost.d:/etc/nginx/vhost.d
+      - ~/nginx-certs:/etc/nginx/certs:ro
+      - ~/nginx-conf:/etc/nginx/conf.d
+      - ~/nginx-logs:/var/log/nginx
+      - /usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - network-namin
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt
+    restart: unless-stopped
+    privileged: true
+    volumes:
+      - ~/nginx/vhost.d:/etc/nginx/vhost.d
+      - ~/nginx-certs:/etc/nginx/certs:rw
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    depends_on:
+      - nginx-proxy
+    networks:
+      - network-namin
+
 networks:
   network-namin:
     external: true
