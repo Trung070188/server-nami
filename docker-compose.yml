@@ -48,7 +48,7 @@ services:
       networks:
         - internalnet
 
-    etsencrypt:
+    letsencrypt:
       image: jrcs/letsencrypt-nginx-proxy-companion
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock:ro
