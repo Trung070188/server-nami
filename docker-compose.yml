@@ -37,19 +37,6 @@ services:
       - mariadb
     networks:
       - network-namin
-
-  # nginx:
-  #   image: nginx:latest
-  #   container_name: nginxcontainer
-  #   restart: unless-stopped
-  #   ports:
-  #     - "80:80"
-  #   volumes:
-  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf 
-  #   depends_on:
-  #     - nodeapp
-  #   networks:
-  #     - internalnet
 networks:
   network-namin:
     external: true
