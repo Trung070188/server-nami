@@ -51,15 +51,13 @@ services:
     networks:
       - internalnet
 
-  letsencrypt:
+   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./nginx-certs:/etc/nginx/certs:rw
-    volumes_from:
-      - nginx-proxy
     environment:
       - DEFAULT_EMAIL=namigame@gmail.com  # Thay thế bằng email của bạn
     depends_on:
@@ -68,7 +66,7 @@ services:
       - internalnet
 
 volumes:
-  mariadb_data:  # Named volume cho MariaDB
+  mariadb_data:  
 
 networks:
   internalnet:
