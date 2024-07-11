@@ -51,7 +51,7 @@ services:
       - "80:80"
       - "443:443"
     environment:
-      ENABLE_IPV6: "true"  # Changed to string
+      ENABLE_IPV6: "true"
     volumes:
       - ~/nginx/vhost.d:/etc/nginx/vhost.d
       - ~/nginx-certs:/etc/nginx/certs:ro
@@ -71,6 +71,8 @@ services:
       - ~/nginx/vhost.d:/etc/nginx/vhost.d
       - ~/nginx-certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      NGINX_PROXY_CONTAINER: nginx-proxy
     depends_on:
       - nginx-proxy
     networks:
