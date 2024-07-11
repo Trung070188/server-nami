@@ -1,4 +1,4 @@
-version: '3.8'  # Sử dụng phiên bản mới hơn để hỗ trợ các tính năng mới
+version: '3'  # Sử dụng phiên bản mới hơn để hỗ trợ các tính năng mới
 
 services:
   mariadb:
@@ -68,7 +68,7 @@ services:
       - internalnet
 
 volumes:
-  mariadb_data:  
+  mariadb_data:  # Named volume cho MariaDB
 
 networks:
   internalnet:
