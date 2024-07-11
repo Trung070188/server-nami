@@ -1,0 +1,13 @@
+# Dockerfile for Let's Encrypt companion
+FROM jrcs/letsencrypt-nginx-proxy-companion
+
+# Set NGINX_PROXY_CONTAINER env variable
+ENV NGINX_PROXY_CONTAINER=nginx-proxy
+
+# Copy necessary configuration
+COPY nginx.vhost.d /etc/nginx/vhost.d
+COPY nginx.certs /etc/nginx/certs
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Entrypoint
+CMD ["/bin/bash", "-c", "trap 'exit 0' INT TERM; while :; do sleep 3600; done"]

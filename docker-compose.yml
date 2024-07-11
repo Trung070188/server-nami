@@ -1,36 +1,16 @@
 version: '3'
 
 services:
-  mariadb:
-    image: mariadb:latest
-    container_name: mariadbcontainer
-    restart: unless-stopped
-    volumes:
-      - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
-      - $HOME/database:/var/lib/mysql
-      - ./custom.cnf:/etc/mysql/conf.d/custom.cnf
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: patientsdb
-      MYSQL_USER: admin
-      MYSQL_PASSWORD: letmein
-      MYSQL_ROOT_PASSWORD: letmein
-    networks:
-      - internalnet
-
   nodeapp:
-    container_name: nodeappcontainer
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: nodeapp:v1
     environment:
-      DB_HOST: mariadb
-      DB_USER: 'root'
-      DB_PASSWORD: 'letmein'
-      DB_NAME: patientsdb
-      DB_PORT: 3306
-      DB_CONNECTION_LIMIT: 500
-      SERVER_PORT: 3000
+      - VIRTUAL_HOST=api.pokeafk.online
+      - VIRTUAL_PORT=3000
+      - LETSENCRYPT_HOST=api.pokeafk.online
+      - LETSENCRYPT_EMAIL=devnami@gmail.com
     ports:
       - "3000:3000"
     depends_on:
@@ -39,53 +19,37 @@ services:
       - internalnet
 
   nginx-proxy:
-    image: jwilder/nginx-proxy
+    build:
+      context: ./nginx-proxy
+      dockerfile: Dockerfile.nginx-proxy
+    image: nginx-proxy:v1
     container_name: nginx-proxy
-    restart: unless-stopped
-    privileged: true
-    environment:
-      ENABLE_IPV6: 'true'
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - ./nginx/vhost.d:/etc/nginx/vhost.d
-      - ./nginx-certs:/etc/nginx/certs:ro
-      - ./nginx-conf:/etc/nginx/conf.d
-      - ./nginx-logs:/var/log/nginx
-      - ./usr/share/nginx/html   # Ensure this volume is writable
+      - ./nginx.vhost.d:/etc/nginx/vhost.d
+      - ./nginx.certs:/etc/nginx/certs:ro
       - /var/run/docker.sock:/tmp/docker.sock:ro
+    environment:
+      - ENABLE_IPV6=true
     networks:
       - internalnet
 
   letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
+    build:
+      context: ./nginx-proxy
+      dockerfile: Dockerfile.letsencrypt
+    image: letsencrypt-companion:v1
     container_name: letsencrypt
-    restart: unless-stopped
-    privileged: true
-    environment:
-      NGINX_PROXY_CONTAINER: nginx-proxy
     volumes:
-      - ./nginx/vhost.d:/etc/nginx/vhost.d
-      - ./nginx-certs:/etc/nginx/certs:rw
+      - ./nginx.vhost.d:/etc/nginx/vhost.d
+      - ./nginx.certs:/etc/nginx/certs:rw
       - /var/run/docker.sock:/var/run/docker.sock:ro
-    depends_on:
-      - nginx-proxy
-    networks:
-      - internalnet
-
-  simple-web:
-    image: yeasy/simple-web
-    container_name: simple-web
-    restart: unless-stopped
     environment:
-      VIRTUAL_HOST: "demo.viettranx.com"
-      VIRTUAL_PORT: 3000
-      LETSENCRYPT_HOST: "demo.viettranx.com"
-      LETSENCRYPT_EMAIL: "blog@demo.viettranx.com"
+      - NGINX_PROXY_CONTAINER=nginx-proxy
     depends_on:
       - nginx-proxy
-      - letsencrypt
     networks:
       - internalnet
 
