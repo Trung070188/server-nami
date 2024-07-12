@@ -4,7 +4,7 @@ services:
   mariadb:
     image: mariadb:latest
     container_name: mariadbcontainer
-    restart: always
+    restart: unless-stopped
     volumes:
       - ./dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
       - $HOME/database:/var/lib/mysql
@@ -45,7 +45,7 @@ services:
   nginx-proxy:
     image: jwilder/nginx-proxy
     container_name: nginx-proxy
-    restart: always
+    restart: unless-stopped
     privileged: true
     ports:
       - "80:80"
@@ -65,7 +65,7 @@ services:
   letsencrypt:
     image: jrcs/letsencrypt-nginx-proxy-companion
     container_name: letsencrypt
-    restart: always
+    restart: unless-stopped
     privileged: true
     volumes:
       - ~/nginx/vhost.d:/etc/nginx/vhost.d
