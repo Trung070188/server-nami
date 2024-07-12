@@ -1,9 +1,7 @@
-#!/bin/bash
-
-# Kiểm tra xem dịch vụ có chạy không
-docker-compose ps | grep 'Exit' &> /dev/null
-if [ $? -eq 0 ]; then
-  # Nếu dịch vụ không chạy, khởi động lại
+if docker-compose ps | grep 'Exit'; then
+  echo "Some containers have exited. Restarting services..."
   docker-compose down
   docker-compose up -d
+else
+  echo "All services are running."
 fi
