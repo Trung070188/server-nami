@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Đường dẫn đến file log
-LOG_FILE="/root/server/server-nami/logfile.log"
-
-# Tên của container Docker bạn muốn khởi động lại
+# Tên của container Docker bạn muốn kiểm tra
 CONTAINER_NAME="nodeappcontainer"
 
+# Lệnh để kiểm tra log của container
+LOGS=$(docker logs $CONTAINER_NAME 2>&1)
+
 # Kiểm tra xem log có chứa lỗi "Too many connections" không
-if grep -q "Too many connections" "$LOG_FILE"; then
+if echo "$LOGS" | grep -q "Too many connections"; then
   # Ghi log
   echo "$(date) - Too many connections error detected. Restarting container $CONTAINER_NAME." >> /root/server/server-nami/restart.log
   # Khởi động lại container
