@@ -38,6 +38,6 @@ if grep -q "Too many connections" "$TEMP_LOG"; then
   echo "$(date) - Too many connections error detected. Restarting container $CONTAINER_NAME." >> /root/server/server-nami/restart.log
   # Khởi động lại container
   docker restart "$CONTAINER_NAME"
-  # Xóa log cũ sau khi khởi động lại để tránh lặp lại
-  rm "$TEMP_LOG"
+  # Xóa log cũ của container sau khi khởi động lại
+  docker logs --since 0m $CONTAINER_NAME > /dev/null 2>&1
 fi
