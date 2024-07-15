@@ -21,7 +21,7 @@
 CONTAINER_NAME="nodeappcontainer"
 
 # Đường dẫn tạm thời để lưu log
-TEMP_LOG="/tmp/${CONTAINER_NAME}_log.tmp"
+TEMP_LOG="/root/server/server-nami/${CONTAINER_NAME}_log.tmp"
 
 # Kiểm tra xem file tạm thời có tồn tại không
 if [ ! -f "$TEMP_LOG" ]; then
