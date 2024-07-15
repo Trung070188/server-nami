@@ -4,7 +4,7 @@ CONTAINER_NAME="nodeappcontainer"
 LOG_FILE="/root/server/server-nami/restart.log"
 
 # Lấy 100 dòng cuối cùng của log container
-LOGS=$(docker logs --tail 50 $CONTAINER_NAME 2>&1)
+LOGS=$(docker logs --tail 20 $CONTAINER_NAME 2>&1)
 
 # Kiểm tra xem log mới nhất có chứa lỗi "Too many connections" không
 if echo "$LOGS" | grep -q "Too many connections"; then
