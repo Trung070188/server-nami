@@ -61,6 +61,24 @@ services:
       - /var/run/docker.sock:/tmp/docker.sock:ro
     networks:
       - network-namin
+
+  letsencrypt:
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    container_name: letsencrypt
+    restart: always
+    privileged: true
+    volumes:
+      - ~/nginx/vhost.d:/etc/nginx/vhost.d
+      - ~/nginx-certs:/etc/nginx/certs:rw
+      - /usr/share/nginx/html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      NGINX_PROXY_CONTAINER: nginx-proxy
+    depends_on:
+      - nginx-proxy
+    networks:
+      - network-namin
+
 networks:
   network-namin:
     external: true
